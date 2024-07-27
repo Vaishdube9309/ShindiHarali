@@ -1,45 +1,155 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shindi Harali Eligibles List</title>
+<html>
+  <head>
+    <title>Display Data</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh; /* Full viewport height */
-            margin: 0;
-            font-family: Arial, sans-serif;
-            text-align: center;
+      body {
+        overflow-x: hidden;
+      }
+      .center {
+        margin-top: 20px;
+      }
+      .hidden {
+        display: none;
+      }
+      .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 2s linear infinite;
+        display: inline-block;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
         }
-
-        .btn {
-            background-color: #4CAF50; /* Green */
-            border: none;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: background-color 0.3s;
+        100% {
+          transform: rotate(360deg);
         }
-
-        .btn:hover {
-            background-color: #45a049;
+      }
+      .message {
+        font-size: 1.2em;
+        margin-top: 8px;
+      }
+      .save {
+        width: 100%;
+        max-width: 200px;
+        height: 50px;
+        background: -webkit-linear-gradient(rgb(40, 130, 40), rgb(108, 192, 108));
+        color: white;
+        border: none;
+        border-radius: 5px;
+      }
+      @media only screen and (max-width: 600px) {
+        .table-responsive {
+          overflow-x: auto;
         }
+      }
+      .table-title {
+        font-size: 1.5em;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        font-weight: bold;
+        color: #333;
+      }
+      thead th {
+        background-color: #f7dea2;
+        color: #721c24;
+      }
     </style>
-</head>
-<body>
-    <h1>Shindi Harali Eligibles List</h1>
-    <p>Click the button below:</p>
-  <button class="btn" onclick="window.open('https://docs.google.com/spreadsheets/d/1WwKZvCzlh2ZcuqH_ErwidcTczGBT2ejo5wTTN2ZxGR0/edit?gid=0#gid=0')">Open Google Spredsheet Here</button>
-   
-</body>
+  </head>
+  <body>
+    <div class="container">
+      <div class="center text-center">
+        <button
+          id="showDataBtn"
+          class="btn btn-primary save"
+          onclick="fetchData()"
+        >
+          Show Data
+        </button>
+        <div id="loading" class="hidden">
+          <div class="spinner"></div>
+          <div class="message">Please wait...</div>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <div class="table-title text-center">Shindi Harali Eligible List</div>
+        <table class="table table-bordered table-striped" id="data-table">
+          <thead>
+            <tr>
+              <th>#SNo</th>
+              <th>AwaasPlus Id</th>
+              <th>Village Name</th>
+              <th>Beneficiary Name</th>
+              <th>Father's/Husband's Name</th>
+              <th>Age</th>
+              <th>Gender</th>
+              <th>Social Category</th>
+              <th>Score</th>
+              <th>Priority No</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      function fetchData() {
+        const button = document.getElementById("showDataBtn");
+        const loading = document.getElementById("loading");
+
+        // Hide the button and show the loading message
+        button.classList.add("hidden");
+        loading.classList.remove("hidden");
+
+        fetch(
+          "https://script.google.com/macros/s/AKfycbyeABVrrInby-8Fk8rDmx_eAgBr8--feWRj5xQ42cMSUq6XF0ny9X3dTUHMsRGKzz3G/exec"
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            const tbody = document.querySelector("#data-table tbody");
+            tbody.innerHTML = ""; // Clear existing rows
+
+            data.slice(3).forEach((item) => {
+              // Skip the first item
+              const row = document.createElement("tr");
+
+              row.innerHTML = `
+                <td>${item.sno}</td>
+                <td>${item.awaasPlusId}</td>
+                <td>${item.villageName}</td>
+                <td>${item.beneficiaryName}</td>
+                <td>${item.fathersHusbandsName}</td>
+                <td>${item.age}</td>
+                <td>${item.gender}</td>
+                <td>${item.socialCategory}</td>
+                <td>${item.score}</td>
+                <td>${item.priorityNo}</td>
+              `;
+
+              tbody.appendChild(row);
+            });
+
+            // Hide the loading message
+            loading.classList.add("hidden");
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+            loading.classList.add("hidden");
+          });
+      }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
 </html>
+
