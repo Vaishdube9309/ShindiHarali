@@ -39,10 +39,11 @@
       }
       .save {
         width: 100%;
-        max-width: 200px;
-        height: 50px;
+        max-width: 300px;
+        height: 55px;
         background: -webkit-linear-gradient(rgb(40, 130, 40), rgb(108, 192, 108));
-        color: white;
+        color: #f1ecec;
+        font-weight: bolder;
         border: none;
         border-radius: 5px;
       }
@@ -62,10 +63,13 @@
         background-color: #f7dea2;
         color: #721c24;
       }
+      table {
+        width: 100%; /* Ensure the table spans the full width */
+      }
     </style>
   </head>
   <body>
-    <div class="container">
+    <div class="container-fluid">
       <div class="center text-center">
         <button
           id="showDataBtn"
@@ -152,4 +156,3 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   </body>
 </html>
-
